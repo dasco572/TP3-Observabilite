@@ -1,0 +1,48 @@
+<section class="barre">
+  <button type="button" [disabled]="enCours()" (click)="rafraichir()">
+    Rafraîchir
+  </button>
+  @if (enCours()) {
+    <span class="attente">appel en cours…</span>
+  }
+</section>
+
+@let r = resultat();
+@if (r.etat === 'succes') {
+  <p class="succes">{{ r.message }}</p>
+} @else if (r.etat === 'echec') {
+  <p class="echec">
+    <strong>{{ r.echec.categorie }}</strong>
+    @if (r.echec.statut) {
+      (HTTP {{ r.echec.statut }})
+    }
+    — {{ r.echec.message }}
+  </p>
+}
+
+<h2>Stations</h2>
+<app-station-list
+  [stations]="stations()"
+  [figee]="enCours()"
+  (louer)="louer($event)"
+/>
+
+<h2>Locations</h2>
+<app-location-list
+  [locations]="locations()"
+  [stations]="stations()"
+  [figee]="enCours()"
+  (rendre)="rendre($event)"
+  (rapport)="voirRapport($event)"
+/>
+
+@let rap = rapport();
+@if (rap) {
+  <h2>Dernier rapport</h2>
+  <ul class="rapport">
+    <li>location <code>{{ rap.reference }}</code></li>
+    <li>station de départ <code>{{ rap.codeDepart }}</code></li>
+    <li>indice de rotation {{ rap.indiceRotation }} %</li>
+    <li>{{ rap.locationsDepuis }} location(s) ouverte(s) à cette station</li>
+  </ul>
+}

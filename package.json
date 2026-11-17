@@ -1,0 +1,12 @@
+{
+  "name": "velos-tp3",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HAI913I TP 3 — projet de démarrage. Raccourcis d'orchestration ; les dépendances de l'interface Angular vivent dans frontend/, pas ici.",
+  "type": "module",
+  "scripts": {
+    "parc": "node scripts/demarrer.mjs parc",
+    "locations": "node scripts/demarrer.mjs locations",
+    "frontend": "cd frontend && npm start"
+  }
+}

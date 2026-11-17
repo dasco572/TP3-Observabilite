@@ -1,0 +1,63 @@
+/* Styles globaux : sobres, et lisibles au vidéoprojecteur. */
+:root {
+  --encre: #1b2b3a;
+  --marine: #002c50;
+  --marine-clair: #2c5a82;
+  --corail: #b8333b;
+  --vert: #1e7a5e;
+  --fond: #f3f6f9;
+  --bordure: #e1e8ee;
+  --blanc: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--encre);
+  background: var(--fond);
+  line-height: 1.5;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--marine);
+  background: var(--marine);
+  color: var(--blanc);
+  border-radius: 3px;
+  padding: 0.35rem 0.8rem;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button.secondaire {
+  background: var(--blanc);
+  color: var(--marine);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--blanc);
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--bordure);
+}
+
+th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--marine-clair);
+}

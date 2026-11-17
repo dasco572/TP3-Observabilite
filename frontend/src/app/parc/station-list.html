@@ -1,0 +1,44 @@
+<table>
+  <thead>
+    <tr>
+      <th>Station</th>
+      <th>Code</th>
+      <th>Vélos</th>
+      <th>Bornes</th>
+      <th>État</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (station of stations(); track station.code) {
+      <tr>
+        <td>{{ station.nom }}</td>
+        <td><code>{{ station.code }}</code></td>
+        <td>{{ station.velosDisponibles }}</td>
+        <td>{{ station.capacite }}</td>
+        <td>
+          @if (station.horsService) {
+            <span class="hors-service">hors service</span>
+          } @else if (station.velosDisponibles === 0) {
+            <span class="vide">aucun vélo</span>
+          } @else {
+            <span class="ouverte">ouverte</span>
+          }
+        </td>
+        <td>
+          <button
+            type="button"
+            [disabled]="figee()"
+            (click)="louer.emit(station.code)"
+          >
+            Louer
+          </button>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="6">aucune station chargée</td>
+      </tr>
+    }
+  </tbody>
+</table>

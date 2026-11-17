@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Journalisation de l'exemple.
+
+  Les deux derniers champs du motif trace_id et span_id ne sont PAS produits par le programme.
+  C'est l'agent OpenTelemetry qui les dépose dans le MDC de SLF4J.
+  Sans agent, ils sont vides et le reste de la ligne est inchangé.
+
+  « %kvp » imprime les paires clé-valeur passées par l'API fluide de SLF4J 2.
+  C'est ce qui rend une ligne de journal interrogeable autrement qu'avec une expression régulière.
+-->
+<configuration>
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%d{HH:mm:ss.SSS} %-5level [%logger{0}] %msg %kvp {trace_id=%mdc{trace_id:-} span_id=%mdc{span_id:-}}%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+</configuration>

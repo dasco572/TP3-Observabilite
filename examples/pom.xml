@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  HAI913I — TP 3 — exemples exécutables « Instrumentation et diagnostic ».
+
+  Un programme Java minimal, sans Spring, serveur, ou base.
+  On voit les mécanismes de l'instrumentation sans rien autour.
+
+  Les versions sont écrites en clair, parce qu'il n'y a ici aucun parent
+  pour les fixer.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>hai913i.tp3</groupId>
+  <artifactId>exemples</artifactId>
+  <version>1.0.0</version>
+  <name>TP3 — exemples exécutables</name>
+  <packaging>jar</packaging>
+
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <slf4j.version>2.0.18</slf4j.version>
+    <logback.version>1.5.38</logback.version>
+    <otel.version>1.66.0</otel.version>
+    <otel.instrumentation.version>2.32.0</otel.instrumentation.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!--
+        Aligne toutes les bibliothèques OpenTelemetry sur une même version.
+        Sans ce BOM, opentelemetry-context arrive en retard de plusieurs
+        versions par la porte des annotations.
+      -->
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-bom</artifactId>
+        <version>${otel.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- La FAÇADE de journalisation. -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <!-- L'IMPLÉMENTATION, choisie au niveau du programme. -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!--
+      API OpenTelemetry : nécessaire à l'instrumentation MANUELLE seulement.
+      Sans agent attaché, ces appels deviennent des no-op et le programme
+      fonctionne à l'identique.
+    -->
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry.instrumentation</groupId>
+      <artifactId>opentelemetry-instrumentation-annotations</artifactId>
+      <version>${otel.instrumentation.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>exemples</finalName>
+    <plugins>
+      <!--
+        Un seul JAR exécutable, pour que la ligne de commande de l'exemple
+        reste lisible : java -javaagent:... -jar target/exemples.jar
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>shade</goal></goals>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>exemples.Demonstration</mainClass>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+              </transformers>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

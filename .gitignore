@@ -1,0 +1,31 @@
+# Artefacts de construction : ils ne font jamais partie d'un rendu.
+target/
+build/
+out/
+bin/
+dist/
+*.class
+*.jar
+
+# Dépendances et caches du frontal
+node_modules/
+.angular/
+out-tsc/
+
+# Agent OpenTelemetry : il se télécharge, il ne se versionne pas.
+opentelemetry-javaagent*.jar
+
+# Métadonnées d'IDE et de système
+.idea/
+.settings/
+.vscode/
+.project
+.classpath
+.factorypath
+*.iml
+.DS_Store
+Thumbs.db
+
+# Journaux et captures locales
+*.log
+captures/

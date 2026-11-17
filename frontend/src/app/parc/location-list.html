@@ -1,0 +1,59 @@
+<table>
+  <thead>
+    <tr>
+      <th>Référence</th>
+      <th>Vélo</th>
+      <th>Départ</th>
+      <th>Arrivée</th>
+      <th>Durée</th>
+      <th>Montant</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (location of locations(); track location.reference) {
+      <tr>
+        <td><code>{{ location.reference }}</code></td>
+        <td><code>{{ location.identifiantVelo }}</code></td>
+        <td>{{ location.codeDepart }}</td>
+        <td>{{ location.codeArrivee ?? '—' }}</td>
+        <td>
+          @if (location.etat === 'CLOTUREE') {
+            {{ location.dureeMinutes }} min
+          } @else {
+            en cours
+          }
+        </td>
+        <td>{{ location.montant !== null ? location.montant + ' €' : '—' }}</td>
+        <td class="actions">
+          @if (location.etat === 'EN_COURS') {
+            <button
+              type="button"
+              [disabled]="figee()"
+              (click)="
+                rendre.emit({
+                  reference: location.reference,
+                  codeStation: stationDeRetour(location),
+                })
+              "
+            >
+              Rendre à {{ stationDeRetour(location) }}
+            </button>
+          }
+          <button
+            type="button"
+            class="secondaire"
+            [disabled]="figee()"
+            (click)="rapport.emit(location.reference)"
+          >
+            Rapport
+          </button>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="7">aucune location</td>
+      </tr>
+    }
+  </tbody>
+</table>
